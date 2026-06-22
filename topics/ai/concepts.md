@@ -1,13 +1,22 @@
 Forward propagation = Prediction  
 Back propagation = Measuring i.e. learning
 
-# IDE
+# Transformer
 
-jupyter - Online IDE
+A transformer is a type of neural network, which have numbers as inputs. Both the input and output words need to be turned into numbers.
 
-# Datasets
+There are many ways to do the conversion, with the most common being word embedding.
 
-kaggle - datasets
+# Large language models (LLM)
+
+LLMs are text completion engines i.e. fancy auto-completes. They have ZERO intelligence.
+
+Examples: chat gpt, claude code, gemini, hugginface, llama
+
+These can be "customized" like this:
+
+- Finetuning (Behave a certain way ex. talk like Trump) - Re-train the model. More complex, saves cost.
+- Knowledge base. (Gain domain knowledge) - Create embeddings and store them in a vector database, which is the searched for and fed into an LLM prompt.
 
 # Frameworks
 
@@ -15,15 +24,13 @@ Wrappers to simplify using AI models to do tasks. Basically write and orchestrat
 
 OpenAI API is quite easy to use directly and gives you the most control, I don’t see much benefit of a wrapper langChain here tbh.
 
-Example: Langchain, Haystack, Microsoft Guidance
+Example: GSD, Superpowers, OpenSpec, BMAD
 
-# autoGPT
+# Product Requirements Document (PRD)
 
-An agent talking to itself. A recursive LLM.
+Outlines the key elements of a product. Also called spec.
 
-It’s a thinking AI basically, Chat GPT is just LLM. A LLM is like a baby without understanding, but using tools like Langchain and Pinecone you can teach the AI task. Auto GPT on has a few task, it’s really like a template to build your own thinking AI.
-
-Research Langchain and Pinecone to get a better understanding of the potential.
+PRD tools, such as ChatPRD, Miro, and Figma, transform ideas into structured documentation, user stories, and technical specifications.
 
 # Agent
 
@@ -33,6 +40,62 @@ The word agent is being thrown around a lot to refer to an application that can 
 
 In broad terms, with the Agent model, the LLM becomes an orchestrator, taking a question, decomposing it into chunks, then using appropriate tools to pull together an answer.
 
+An agent is just a loop talking to an LLM, i.e. iterating over a task until stopped or completed.
+
+OpenCode is a popular AI coding agent that runs in the terminal, similar to Claude Code, just open source and can use all the LLMs.
+
+An agent talking to itself. A recursive LLM.
+
+It’s a thinking AI basically, Chat GPT is just LLM. A LLM is like a baby without understanding, but using tools like Langchain and Pinecone you can teach the AI task. Auto GPT on has a few task, it’s really like a template to build your own thinking AI.
+
+# Sub-agent
+
+Sub-agents are specialized personas that you may want to offload specific types work to fresh contexts backed by a full agent instance.
+
+So use subagents to keep your context clean when you want an actual full agent instance to perform something without poisoning your main context (code reviewer, skeptic, testing specialist, language/framework specialist, architect, etc).
+
+# Skill
+
+Skills are just prompts that are saved in files the agent can access as needed.
+
+They are literally just markdown files, used to lazily load some extra context into the agent.
+
+For every task and document type you do, you can have a standard prompt with all your customizations.
+
+Skills is basically just breaking a claude.md file into usable chunks so it can access them when needed instead of having to review an entire huge document every time. Makes things run smoother with less ADHD.
+
+Skills are specialized instructions you may want to provide to Claude in certain circumstances, but may not always be relevant.
+
+Use skills when you want to sometimes provide instructions to your primary agent with a relevant skillset.
+
+They are “packages” of prompts and tools.
+
+They are more a lightweight form of MCP as they are easier to put together and share. Also, they run in context, whereas subagents create their own context.
+
+Skills are an encapsulation of instructions. Prompts are among them. But my "skill" could be to share a Powerpoint template with my fonts, styling, samples of tables, samples of visuals and infographics. I can then point to that skill in my usual prompts and ask to create slides in powerpoint. This way I don't need to create the .pptx file at all, my prompt will do it while using my specific ppt skill.
+
+# Model Context Protocol (MCP)
+
+> Standard for AI/LLMs to communicate with APIs.
+
+> MCP makes it easier to expose new tools to LLMs.
+
+An open-source standard for building APIs in a way that makes it easier for LLMs to connect to them.
+
+Other standards include REST, RPC, SOAP and GraphQL.
+
+MCP is an API that calls other APIs.
+
+The clients sends a prompt, and MPC figures out which API to call next.
+
+To actually use MCP, you need a client that supports the MCP protocol, like Claude Desktop.
+
+# Slash commands
+
+Slash commands are specialized commands you may want to invoke manually in certain circumstances.
+
+Use slash commands when there are things you specifically know you’ll want to invoke at certain points.
+
 # Tools / Plugins
 
 Ways in which the agent can choose to do things ex. search the web, query a database.
@@ -41,26 +104,29 @@ Tools and plugins are basically the same things.
 
 Ex.
 
--   search (e.g. by using Google Search API or Bing API)
--   web browser (e.g. given a URL, fetch its content)
--   bash executor
--   calculator
+- search (e.g. by using Google Search API or Bing API)
+- web browser (e.g. given a URL, fetch its content)
+- bash executor
+- calculator
 
-# Transformer
+# Embeddings
 
-A transformer is a type of neural network, which have numbers as inputs. Both the input and output words need to be turned into numbers.
+Embeddings are a numerical representation of text that can be used to measure the relatedness between two pieces of text.
 
-There are many ways to do the conversion, with the most common being word embedding.
+Turn data into a vector with hundreds of dimensions.
 
-# LLM
+Data, like words, converted into an array of numbers, known as a vector, which contains pattern of relationship between the data.
 
-LLMs (Large language models) are text completion engines
+Open AI ada = 8,191 tokens i.e. 32,764 characters ~ 10 pages of text.
 
-Examples: gpt-3.5, gpt-4, hugginface, llama
+One direction that I find very promising is to use LLMs to generate embeddings and then build your ML applications on top of these embeddings, e.g. for search and recsys. As of April 2023, the cost for embeddings using the smaller model text-embedding-ada-002 is $0.0004/1k tokens. If each item averages 250 tokens (187 words), this pricing means $1 for every 10k items or $100 for 1 million items.
 
-# Custom AI
+# Vector databases
 
-2 ways to do this:
+> What pieces of text in the database have similar vectors to the prompt.
 
-1. Finetune LLM (Behave a certain way ex. talk like Trump) - Re-train the model. More complex, saves cost.
-2. Knowledge base. (Gain domain knowledge) - Create embeddings and store them in a vector database, which is the searched for and fed into an LLM prompt.
+A vector database indexes and stores vector embeddings for fast retrieval and similarity search. It compares how close embeddings are.
+
+It turns the user's question into a vector, which is compared to the vectors in the database.
+
+Ex. Pinecone, Qdrant, Weaviate, Chroma, Faiss, Redis, Milvus, ScaNN.
